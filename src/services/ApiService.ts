@@ -37,6 +37,11 @@ class ApiService {
     });
     return response.data;
   }
+
+  async expandUrl(shortCode: string): Promise<string> {
+    const response = await this.client.get(`/api/urls/${shortCode}`);
+    return response.data.originalUrl;
+  }
 }
 
 export default ApiService;

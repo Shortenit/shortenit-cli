@@ -14,6 +14,7 @@ import ConfigManager from './config/ConfigManager';
 import ApiService from './services/ApiService'
 import QRCodeService from './services/QRCodeService'
 import ShortCommand from './commands/ShortCommand'
+import ExpandCommand from './commands/ExpandCommand'
 
 const packageJson = require('../package.json');
 
@@ -40,6 +41,17 @@ async function main() {
       const qrService = new QRCodeService();
       const command = new ShortCommand(apiService, qrService);
       await command.execute(url, options);
+    });
+
+  // Expand command
+  program
+    .command('expand <url>')
+    .description('Get the original URL from a shortened link')
+    .action(async (shortUrl: string) => {
+      await configManager.ensureConfigured();
+      const apiService = new ApiService(configManager);
+      const command = new ExpandCommand(apiService);
+      await command.execute(shortUrl);
     });
 
   // Config command

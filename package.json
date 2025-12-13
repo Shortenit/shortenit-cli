@@ -1,6 +1,6 @@
 {
   "name": "shortenit-cli",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "CLI tool for Shortenit URL shortener",
   "homepage": "https://github.com/shortenit/shortenit-cli#readme",
   "bugs": {

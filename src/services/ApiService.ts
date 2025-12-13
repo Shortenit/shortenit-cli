@@ -29,10 +29,11 @@ class ApiService {
     });
   }
 
-  async shortenUrl(originalUrl: string, customAlias?: string): Promise<ShortenUrlResponse> {
+  async shortenUrl(originalUrl: string, customAlias?: string, expirationDays?: string): Promise<ShortenUrlResponse> {
     const response = await this.client.post('/api/shorten', {
       originalUrl,
       customAlias,
+      expirationDays,
     });
     return response.data;
   }

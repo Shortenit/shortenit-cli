@@ -4,6 +4,7 @@ import ApiService from '../services/ApiService';
 
 interface ShortCommandOptions {
   customAlias?: string;
+  expirationDays?: string;
 }
 
 class ShortCommand {
@@ -16,11 +17,14 @@ class ShortCommand {
     const spinner = ora('Creating shortened link...').start();
 
     try {
-      const result = await this.apiService.shortenUrl(longUrl, options.customAlias);
+      const result = await this.apiService.shortenUrl(longUrl, options.customAlias, options.expirationDays);
       spinner.succeed('Link shortened successfully!');
 
       console.log('');
       console.log(chalk.bold('Short URL:   '), chalk.green(result.shortUrl));
+      if (result.expiresAt != null) {
+        console.log(chalk.bold('Expires At:  '), chalk.green(result.expiresAt));
+      }
       console.log('');
 
     } catch (error: any) {

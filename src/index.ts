@@ -30,6 +30,7 @@ async function main() {
     .command('short <url>')
     .description('Create a shortened link')
     .option('-c, --custom-alias <string>', 'Custom alias for the short URL')
+    .option('-e, --expiration-days <number>', 'Number of days until expiration')
     .action(async (url: string, options: any) => {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);

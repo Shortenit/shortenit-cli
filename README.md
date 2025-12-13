@@ -14,6 +14,12 @@ A command-line interface tool for the Shortenit URL shortener service. Create sh
 
 ## Installation
 
+### From NPM
+
+```bash
+npm install -g shortenit-cli
+```
+
 ### From Source
 
 ```bash

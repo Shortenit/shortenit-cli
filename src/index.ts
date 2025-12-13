@@ -59,11 +59,12 @@ async function main() {
   program
     .command('delete <url>')
     .description('Delete a shortened link')
-    .action(async (shortUrl: string) => {
+    .option('-f, --force', 'Force deletion without confirmation')
+    .action(async (shortUrl: string, options: any) => {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);
       const command = new DeleteCommand(apiService);
-      await command.execute(shortUrl);
+      await command.execute(shortUrl, options.force);
     });
 
   // Config command

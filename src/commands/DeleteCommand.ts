@@ -6,7 +6,7 @@ import ApiService from '../services/ApiService';
 class DeleteCommand {
   constructor(private apiService: ApiService) {}
 
-  async execute(shortCodeOrUrl: string): Promise<void> {
+  async execute(shortCodeOrUrl: string, force: boolean = false): Promise<void> {
     console.log('');
     // Extract short code from URL if full URL is provided
     let shortCode = shortCodeOrUrl;
@@ -15,27 +15,30 @@ class DeleteCommand {
       shortCode = parts[parts.length - 1];
     }
 
-    try {
-      const answers = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'confirm',
-          message: `Are you sure you want to delete the short URL "${shortCode}"?`,
-          default: false,
-        },
-      ]);
+    // Confirm deletion unless force flag is used
+    if (!force) {
+      try {
+        const answers = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'confirm',
+            message: `Are you sure you want to delete the short URL "${shortCode}"?`,
+            default: false,
+          },
+        ]);
 
-      if (!answers.confirm) {
-        console.log(chalk.yellow('\n Deletion cancelled.\n'));
-        return;
-      }
-    } catch (error) {
-      // Check if the error is the specific "Force Closed" error
-      if (error instanceof Error && error.name === 'ExitPromptError') {
-        console.log(chalk.yellow('\n Deletion cancelled.\n'));
-        process.exit(0); // Exit cleanly
-      } else {
-        throw error;
+        if (!answers.confirm) {
+          console.log(chalk.yellow('\n Deletion cancelled.\n'));
+          return;
+        }
+      } catch (error) {
+        // Check if the error is the specific "Force Closed" error
+        if (error instanceof Error && error.name === 'ExitPromptError') {
+          console.log(chalk.yellow('\n Deletion cancelled.\n'));
+          process.exit(0); // Exit cleanly
+        } else {
+          throw error;
+        }
       }
     }
 

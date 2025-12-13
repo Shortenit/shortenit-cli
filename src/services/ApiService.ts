@@ -42,6 +42,10 @@ class ApiService {
     const response = await this.client.get(`/api/urls/${shortCode}`);
     return response.data.originalUrl;
   }
+
+  async deleteUrl(shortCode: string): Promise<void> {
+    await this.client.delete(`/api/urls/${shortCode}`);
+  }
 }
 
 export default ApiService;

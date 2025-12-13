@@ -15,6 +15,7 @@ import ApiService from './services/ApiService'
 import QRCodeService from './services/QRCodeService'
 import ShortCommand from './commands/ShortCommand'
 import ExpandCommand from './commands/ExpandCommand'
+import DeleteCommand from './commands/DeleteCommand'
 
 const packageJson = require('../package.json');
 
@@ -51,6 +52,17 @@ async function main() {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);
       const command = new ExpandCommand(apiService);
+      await command.execute(shortUrl);
+    });
+
+  // Delete command
+  program
+    .command('delete <url>')
+    .description('Delete a shortened link')
+    .action(async (shortUrl: string) => {
+      await configManager.ensureConfigured();
+      const apiService = new ApiService(configManager);
+      const command = new DeleteCommand(apiService);
       await command.execute(shortUrl);
     });
 

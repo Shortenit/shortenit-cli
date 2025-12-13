@@ -12,6 +12,7 @@ import { Command } from 'commander';
 import chalk from 'chalk';
 import ConfigManager from './config/ConfigManager';
 import ApiService from './services/ApiService'
+import QRCodeService from './services/QRCodeService'
 import ShortCommand from './commands/ShortCommand'
 
 const packageJson = require('../package.json');
@@ -31,10 +32,12 @@ async function main() {
     .description('Create a shortened link')
     .option('-c, --custom-alias <string>', 'Custom alias for the short URL')
     .option('-e, --expiration-days <number>', 'Number of days until expiration')
+    .option('-p, --print-qr', 'Print QR code to terminal')
     .action(async (url: string, options: any) => {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);
-      const command = new ShortCommand(apiService);
+      const qrService = new QRCodeService();
+      const command = new ShortCommand(apiService, qrService);
       await command.execute(url, options);
     });
 

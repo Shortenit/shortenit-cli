@@ -1,15 +1,18 @@
 import chalk from 'chalk';
 import ora from 'ora';
 import ApiService from '../services/ApiService';
+import QRCodeService from '../services/QRCodeService';
 
 interface ShortCommandOptions {
   customAlias?: string;
   expirationDays?: string;
+  printQr?: boolean;
 }
 
 class ShortCommand {
   constructor(
     private apiService: ApiService,
+    private qrService: QRCodeService
   ) { }
 
   async execute(longUrl: string, options: ShortCommandOptions): Promise<void> {
@@ -26,6 +29,10 @@ class ShortCommand {
         console.log(chalk.bold('Expires At:  '), chalk.green(result.expiresAt));
       }
       console.log('');
+
+      if (options.printQr) {
+        await this.qrService.printToTerminal(result.shortUrl);
+      }
 
     } catch (error: any) {
       spinner.fail('Failed to shorten URL');

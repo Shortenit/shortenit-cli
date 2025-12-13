@@ -11,6 +11,8 @@ if (majorVersion < 24) {
 import { Command } from 'commander';
 import chalk from 'chalk';
 import ConfigManager from './config/ConfigManager';
+import ApiService from './services/ApiService'
+import ShortCommand from './commands/ShortCommand'
 
 const packageJson = require('../package.json');
 
@@ -22,6 +24,17 @@ async function main() {
     .name('shortenit')
     .description('CLI tool for Shortenit URL shortener')
     .version(packageJson.version);
+
+  // Short command
+  program
+    .command('short <url>')
+    .description('Create a shortened link')
+    .action(async (url: string) => {
+      await configManager.ensureConfigured();
+      const apiService = new ApiService(configManager);
+      const command = new ShortCommand(apiService);
+      await command.execute(url);
+    });
 
   // Config command
   program

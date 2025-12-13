@@ -33,6 +33,7 @@ async function main() {
     .option('-c, --custom-alias <string>', 'Custom alias for the short URL')
     .option('-e, --expiration-days <number>', 'Number of days until expiration')
     .option('-p, --print-qr', 'Print QR code to terminal')
+    .option('-s, --save-qr', 'Save QR code to Downloads folder')
     .action(async (url: string, options: any) => {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);

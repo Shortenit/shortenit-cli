@@ -7,6 +7,7 @@ interface ShortCommandOptions {
   customAlias?: string;
   expirationDays?: string;
   printQr?: boolean;
+  saveQr?: boolean;
 }
 
 class ShortCommand {
@@ -33,6 +34,13 @@ class ShortCommand {
       if (options.printQr) {
         await this.qrService.printToTerminal(result.shortUrl);
       }
+
+      if (options.saveQr) {
+        const spinner2 = ora('Saving QR code...').start();
+        const filepath = await this.qrService.saveToDownloads(result.shortUrl, result.shortCode);
+        spinner2.succeed(`QR code saved to: ${chalk.cyan(filepath)}\n`);
+      }
+
 
     } catch (error: any) {
       spinner.fail('Failed to shorten URL');

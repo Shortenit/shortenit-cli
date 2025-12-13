@@ -29,11 +29,12 @@ async function main() {
   program
     .command('short <url>')
     .description('Create a shortened link')
-    .action(async (url: string) => {
+    .option('-c, --custom-alias <string>', 'Custom alias for the short URL')
+    .action(async (url: string, options: any) => {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);
       const command = new ShortCommand(apiService);
-      await command.execute(url);
+      await command.execute(url, options);
     });
 
   // Config command

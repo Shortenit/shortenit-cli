@@ -2,17 +2,21 @@ import chalk from 'chalk';
 import ora from 'ora';
 import ApiService from '../services/ApiService';
 
+interface ShortCommandOptions {
+  customAlias?: string;
+}
+
 class ShortCommand {
   constructor(
     private apiService: ApiService,
   ) { }
 
-  async execute(longUrl: string): Promise<void> {
+  async execute(longUrl: string, options: ShortCommandOptions): Promise<void> {
     console.log('');
     const spinner = ora('Creating shortened link...').start();
 
     try {
-      const result = await this.apiService.shortenUrl(longUrl);
+      const result = await this.apiService.shortenUrl(longUrl, options.customAlias);
       spinner.succeed('Link shortened successfully!');
 
       console.log('');

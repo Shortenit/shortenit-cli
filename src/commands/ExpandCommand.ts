@@ -27,6 +27,8 @@ class ExpandCommand {
       spinner.fail('Failed to expand URL');
       if (error.response?.data?.error) {
         console.error(chalk.red(error.response.data.error));
+      } else if (error.response?.status === 404) {
+        console.error(chalk.red('Short URL not found\n'));
       } else {
         console.error(chalk.red(error.message));
       }

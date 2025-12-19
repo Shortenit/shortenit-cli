@@ -46,6 +46,8 @@ class ShortCommand {
       spinner.fail('Failed to shorten URL');
       if (error.response?.data?.error) {
         console.error(chalk.red(error.response.data.error));
+      } else if (error.response?.status === 409) {
+        console.error(chalk.red('Custom alias already exists\n'));
       } else {
         console.error(chalk.red(error.message));
       }

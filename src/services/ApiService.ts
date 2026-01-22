@@ -11,6 +11,20 @@ interface ShortenUrlResponse {
   customAlias?: string;
 }
 
+interface UrlItem {
+  shortCode: string;
+  originalUrl: string;
+  clickCount: number;
+  createdAt: string;
+  expiresAt?: string;
+  customAlias?: string;
+  isExpired: boolean;
+}
+
+interface UrlRecentResponse {
+  content: UrlItem[];
+}
+
 class ApiService {
   private client: AxiosInstance;
   private configManager: ConfigManager;
@@ -45,6 +59,16 @@ class ApiService {
 
   async deleteUrl(shortCode: string): Promise<void> {
     await this.client.delete(`/api/urls/${shortCode}`);
+  }
+
+  async listUrls(): Promise<UrlRecentResponse> {
+    const response = await this.client.get(`/api/urls/recent`);
+    return response.data;
+  }
+
+  async listAllUrls(): Promise<UrlItem[]> {
+    const response = await this.client.get(`/api/urls/all`);
+    return Array.isArray(response.data) ? response.data : response.data.content || [];
   }
 }
 

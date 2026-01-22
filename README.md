@@ -7,6 +7,7 @@ A command-line interface tool for the Shortenit URL shortener service. Create sh
 - **Shorten URLs** - Create shortened links with optional custom aliases
 - **Expand URLs** - Retrieve original URLs from shortened links
 - **Delete URLs** - Delete shortened links
+- **List URLs** - List shortened links
 - **Expiration Control** - Set custom expiration periods for your links
 - **QR Code Generation** - Generate QR codes in terminal or save as PNG files
 - **Configuration Management** - Easy setup and configuration management
@@ -137,6 +138,22 @@ Delete without confirmation:
 shortenit delete https://short.link/abc123 --force
 ```
 
+### List recent links
+
+Display the most 10 recent shortened links:
+
+```bash
+shortenit list
+```
+
+### List all links
+
+Display all the shortened links:
+
+```bash
+shortenit list-all
+```
+
 ### Help
 
 View all available commands:
@@ -175,6 +192,14 @@ Delete a shortened link.
 **Options**
 - `-f, --force` - Force deletion without confirmation
 
+### `list`
+
+List 10 recent shortened links.
+
+### `list-all`
+
+List all shortened links.
+
 ### `config`
 
 Manage configuration settings.
@@ -194,7 +219,8 @@ shortenit-cli/
 │   ├── commands/
 │   │   ├── ShortCommand.ts      # URL shortening command
 │   │   ├── ExpandCommand.ts     # URL expansion command
-│   │   └── DeleteCommand.ts     # URL deletion command
+│   │   ├── DeleteCommand.ts     # URL deletion command
+│   │   └── ListCommand.ts       # URL listing command
 │   ├── config/
 │   │   └── ConfigManager.ts     # Configuration management
 │   └── services/
@@ -222,6 +248,7 @@ shortenit-cli/
 - `qrcode` - QR code generation
 - `qrcode-terminal` - QR code display in terminal
 - `conf` - Configuration management
+- `table` - Table formatting for displaying URL lists
 
 **Development:**
 - `typescript` - TypeScript compiler

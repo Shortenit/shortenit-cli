@@ -16,6 +16,7 @@ import QRCodeService from './services/QRCodeService'
 import ShortCommand from './commands/ShortCommand'
 import ExpandCommand from './commands/ExpandCommand'
 import DeleteCommand from './commands/DeleteCommand'
+import ListCommand from './commands/ListCommand'
 
 const packageJson = require('../package.json');
 
@@ -65,6 +66,28 @@ async function main() {
       const apiService = new ApiService(configManager);
       const command = new DeleteCommand(apiService);
       await command.execute(shortUrl, options.force);
+    });
+
+  // List command
+  program
+    .command('list')
+    .description('List 10 recent shortened links')
+    .action(async () => {
+      await configManager.ensureConfigured();
+      const apiService = new ApiService(configManager);
+      const command = new ListCommand(apiService);
+      await command.execute(false);
+    });
+
+  // List all command
+  program
+    .command('list-all')
+    .description('List all shortened links')
+    .action(async () => {
+      await configManager.ensureConfigured();
+      const apiService = new ApiService(configManager);
+      const command = new ListCommand(apiService);
+      await command.execute(true);
     });
 
   // Config command

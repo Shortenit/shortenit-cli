@@ -260,9 +260,10 @@ shortenit-cli/
 
 MIT
 
-## Author
-
-Hein Oke Soe
+## Contributors
+<a href="https://github.com/shortenit/shortenit-cli/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=shortenit/shortenit-cli" />
+</a>
 
 ---
 

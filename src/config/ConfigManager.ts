@@ -3,6 +3,7 @@ import inquirer from 'inquirer';
 import chalk from 'chalk';
 
 interface ConfigSchema {
+  apiKey: string;
   baseUrl: string;
 }
 
@@ -16,7 +17,7 @@ class ConfigManager {
   }
 
   isConfigured(): boolean {
-    return this.config.has('baseUrl');
+    return this.config.has('apiKey') && this.config.has('baseUrl');
   }
 
   async ensureConfigured(): Promise<void> {
@@ -43,8 +44,20 @@ class ConfigManager {
               return 'Please enter a valid URL';
             }
           },
+        },
+        {
+          type: 'input',
+          name: 'apiKey',
+          message: 'Enter your API key:',
+          validate: (input: string) => {
+            if (input.trim().length === 0) {
+              return 'API key cannot be empty';
+            }
+            return true;
+          },
         }
       ]);
+      this.config.set('apiKey', answers.apiKey);
       this.config.set('baseUrl', answers.baseUrl.replace(/\/$/, '')); // Remove trailing slash
       console.log(chalk.green('\n Configuration saved successfully!\n'));
     } catch (error) {
@@ -58,6 +71,10 @@ class ConfigManager {
     }
   }
 
+  getApiKey(): string {
+    return this.config.get('apiKey') || '';
+  }
+
   getBaseUrl(): string {
     return this.config.get('baseUrl') || '';
   }
@@ -68,10 +85,12 @@ class ConfigManager {
   }
 
   showConfig(): void {
+    const apiKey = this.getApiKey();
     const baseUrl = this.getBaseUrl();
 
     console.log(chalk.bold('\n Current Configuration:'));
     console.log(chalk.cyan(' Base URL:'), baseUrl || 'Not set');
+    console.log(chalk.cyan(' API Key:'), apiKey ? `${apiKey.substring(0, 10)}...` : 'Not set');
     console.log('');
   }
 }

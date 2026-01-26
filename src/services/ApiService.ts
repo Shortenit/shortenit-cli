@@ -38,6 +38,7 @@ class ApiService {
       baseURL: configManager.getBaseUrl(),
       headers: {
         'Content-Type': 'application/json',
+        'X-API-Key': configManager.getApiKey(),
       },
       httpsAgent,
     });

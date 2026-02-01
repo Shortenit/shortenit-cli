@@ -1,7 +1,6 @@
 import qrCodeTerminal from 'qrcode-terminal';
 import chalk from 'chalk';
 import QRCode from 'qrcode';
-import { promises as fs } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 

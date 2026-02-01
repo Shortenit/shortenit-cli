@@ -2,27 +2,15 @@ import axios, { AxiosInstance } from 'axios';
 import https from 'https';
 import ConfigManager from '../config/ConfigManager';
 
-interface ShortenUrlResponse {
-  shortCode: string;
+interface UrlResponse {
+  originalUrl: string;
+  code: string;
   shortUrl: string;
-  originalUrl: string;
-  createdAt: string;
-  expiresAt?: string;
-  customAlias?: string;
-}
-
-interface UrlItem {
-  shortCode: string;
-  originalUrl: string;
+  title: string;
   clickCount: number;
   createdAt: string;
   expiresAt?: string;
-  customAlias?: string;
-  isExpired: boolean;
-}
-
-interface UrlRecentResponse {
-  content: UrlItem[];
+  isActive: boolean;
 }
 
 class ApiService {
@@ -44,31 +32,32 @@ class ApiService {
     });
   }
 
-  async shortenUrl(originalUrl: string, customAlias?: string, expirationDays?: string): Promise<ShortenUrlResponse> {
-    const response = await this.client.post('/api/shorten', {
+  async shortenUrl(originalUrl: string, title: string, code?: string, expirationDays?: string): Promise<UrlResponse> {
+    const response = await this.client.post('/api/urls', {
       originalUrl,
-      customAlias,
+      title,
+      code,
       expirationDays,
     });
     return response.data;
   }
 
-  async expandUrl(shortCode: string): Promise<string> {
+  async expandUrl(shortCode: string): Promise<UrlResponse> {
     const response = await this.client.get(`/api/urls/${shortCode}`);
-    return response.data.originalUrl;
+    return response.data;
   }
 
   async deleteUrl(shortCode: string): Promise<void> {
     await this.client.delete(`/api/urls/${shortCode}`);
   }
 
-  async listUrls(): Promise<UrlRecentResponse> {
-    const response = await this.client.get(`/api/urls/recent`);
-    return response.data;
+  async listUrls(): Promise<UrlResponse[]> {
+    const response = await this.client.get(`/api/urls?page=0&size=10`);
+    return Array.isArray(response.data) ? response.data : response.data.content || [];
   }
 
-  async listAllUrls(): Promise<UrlItem[]> {
-    const response = await this.client.get(`/api/urls/all`);
+  async listAllUrls(): Promise<UrlResponse[]> {
+    const response = await this.client.get(`/api/urls`);
     return Array.isArray(response.data) ? response.data : response.data.content || [];
   }
 }

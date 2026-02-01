@@ -4,7 +4,7 @@ import { table } from 'table';
 import ApiService from '../services/ApiService';
 
 class ListCommand {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async execute(showAll: boolean = false): Promise<void> {
     console.log('');
@@ -13,11 +13,10 @@ class ListCommand {
     try {
       let urls;
       if (showAll) {
-        urls = (await this.apiService.listAllUrls()).reverse();
+        urls = await this.apiService.listAllUrls();
         spinner.succeed(`Retrieved all ${urls.length} URLs`);
       } else {
-        const response = await this.apiService.listUrls();
-        urls = response.content;
+        urls = await this.apiService.listUrls();
         spinner.succeed(`Retrieved recent ${urls.length} URLs`);
       }
 
@@ -31,27 +30,36 @@ class ListCommand {
       const tableData = [
         [
           chalk.bold('Short Code'),
-          chalk.bold('Original URL'),
+          chalk.bold('Title'),
           chalk.bold('Clicks'),
           chalk.bold('Created At'),
+          chalk.bold('Active')
         ],
       ];
 
       for (const url of urls) {
-        const originalUrl = url.originalUrl.length > 50 
-          ? url.originalUrl.substring(0, 47) + '...' 
-          : url.originalUrl;
         const createdAt = new Date(url.createdAt).toLocaleDateString('en-GB');
 
         tableData.push([
-          chalk.cyan(url.shortCode),
-          originalUrl,
+          chalk.cyan(url.code),
+          url.title,
           chalk.yellow((url.clickCount || 0).toString()),
           createdAt,
+          url.isActive.toString(),
         ]);
       }
 
-      console.log(table(tableData));
+      const config = {
+        columns: {
+          0: { width: 10, wrapWord: true },  // Short Code
+          1: { width: 50, wrapWord: true },  // Title - wrap long text
+          2: { width: 6 },  // Clicks
+          3: { width: 10 },  // Created At
+          4: { width: 6 },  // Active
+        },
+      };
+
+      console.log(table(tableData, config));
 
       if (!showAll) {
         console.log(chalk.dim('💡 Use "shortenit list-all" to see all URLs\n'));

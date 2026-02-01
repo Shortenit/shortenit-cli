@@ -3,7 +3,7 @@ import ora from 'ora';
 import ApiService from '../services/ApiService';
 
 class ExpandCommand {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
   async execute(shortUrl: string): Promise<void> {
     console.log('');
@@ -17,11 +17,12 @@ class ExpandCommand {
         shortCode = parts[parts.length - 1];
       }
 
-      const originalUrl = await this.apiService.expandUrl(shortCode);
+      const result = await this.apiService.expandUrl(shortCode);
       spinner.succeed('Original URL retrieved!');
 
       console.log('');
-      console.log(chalk.bold('Original URL: '), chalk.cyan(originalUrl));
+      console.log(chalk.bold('Original URL: '), chalk.green(result.originalUrl));
+      console.log(chalk.bold('Title:        '), chalk.green(result.title));
       console.log('');
     } catch (error: any) {
       spinner.fail('Failed to expand URL');

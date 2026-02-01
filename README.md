@@ -40,7 +40,7 @@ npm link
 
 ## Configuration
 
-On first run, the CLI will prompt you to configure your backend URL:
+On first run, the CLI will prompt you to configure your backend URL and API Key:
 
 ```bash
 shortenit

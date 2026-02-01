@@ -13,6 +13,7 @@ import chalk from 'chalk';
 import ConfigManager from './config/ConfigManager';
 import ApiService from './services/ApiService'
 import QRCodeService from './services/QRCodeService'
+import TitleFetcherService from './services/TitleFetcherService'
 import ShortCommand from './commands/ShortCommand'
 import ExpandCommand from './commands/ExpandCommand'
 import DeleteCommand from './commands/DeleteCommand'
@@ -41,7 +42,8 @@ async function main() {
       await configManager.ensureConfigured();
       const apiService = new ApiService(configManager);
       const qrService = new QRCodeService();
-      const command = new ShortCommand(apiService, qrService);
+      const titleFetcher = new TitleFetcherService();
+      const command = new ShortCommand(apiService, qrService, titleFetcher);
       await command.execute(url, options);
     });
 
